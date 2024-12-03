@@ -22,9 +22,18 @@ export default function InputForm() {
     setItems(items.map((item) => (item.id === id ? { ...item, value } : item)));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("送信されたデータ:", items);
+    const prompt: string = items.map((item) => item.value).join(", ");
+    // const response = await generateResponse(values);
+    const response = await fetch("/api/gemini-api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt_post: prompt }), //promptに入力する文字を入れる
+    });
+    console.log(response);
   };
 
   return (
