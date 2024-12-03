@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Item } from "../types";
-import { generateResponse } from "../api/gemini-api";
 
 export default function InputForm() {
   const [items, setItems] = useState<Item[]>([{ id: 1, value: "" }]);
