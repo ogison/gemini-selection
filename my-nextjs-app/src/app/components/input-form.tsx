@@ -70,14 +70,14 @@ export default function InputForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex items-center justify-center p-4">
+    <div className="min-h-screen from-blue-100 to-blue-200 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
             選択アプリ
           </CardTitle>
           <CardDescription className="text-center">
-            {selected ? "選択結果" : "選択肢を入力してください"}
+            {selected ? "結果" : "選択肢を入力してください"}
           </CardDescription>
         </CardHeader>
         <CardContent>
