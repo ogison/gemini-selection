@@ -14,5 +14,5 @@ touch .env.local
 https://aistudio.google.com/prompts/new_chat
 
 ```
-NEXT_PUBLIC_GEMINI_API_KEY=取得したAPIキー
+GEMINI_API_KEY=取得したAPIキー
 ```
