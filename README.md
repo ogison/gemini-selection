@@ -1,6 +1,6 @@
-# gpt-selection
+# gemini-selection
 
-ChatGPT selects worthy person in options.
+Gemini selects worthy person in options.
 
 # ローカルで使用する場合
 
