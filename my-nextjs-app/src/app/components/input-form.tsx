@@ -19,6 +19,7 @@ export default function InputForm() {
   const [items, setItems] = useState<Item[]>([{ id: 1, value: "" }]);
   const [selected, setSelected] = useState<boolean>(false);
   const [result, setResult] = useState<string>();
+  const [resultReason, setResultReason] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const addItem = () => {
@@ -49,8 +50,14 @@ export default function InputForm() {
         },
         body: JSON.stringify({ prompt_post: prompt }),
       });
+      // レスポンス結果をjson型に変更
       const data = await response.json();
-      setResult(data.message);
+      let message = data.message;
+      message = message.replace(/```json|```/g, "").trim();
+      const jsonMessage = JSON.parse(message);
+
+      setResult(jsonMessage.選択結果);
+      setResultReason(jsonMessage.理由);
       setSelected(true);
     } finally {
       setIsLoading(false);
@@ -131,7 +138,7 @@ export default function InputForm() {
               <CheckCircle2 className="h-4 w-4" />
               <AlertTitle>選択結果 {result}</AlertTitle>
               <AlertDescription className="text-lg font-semibold">
-                {selected}
+                {resultReason}
               </AlertDescription>
             </Alert>
           )}
