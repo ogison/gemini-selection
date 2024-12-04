@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { promptFormat } from "../constants";
 
 export default function InputForm() {
   const [items, setItems] = useState<Item[]>([{ id: 1, value: "" }]);
@@ -36,19 +37,21 @@ export default function InputForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSelected(true);
     setIsLoading(true);
-    const prompt: string = items.map((item) => item.value).join(", ");
+    const choices = items.map((item) => `- ${item.value}`).join("\n");
+    const prompt = promptFormat(choices);
+
     try {
       const response = await fetch("/api/gemini-api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt_post: prompt }), //promptに入力する文字を入れる
+        body: JSON.stringify({ prompt_post: prompt }),
       });
       const data = await response.json();
       setResult(data.message);
+      setSelected(true);
     } finally {
       setIsLoading(false);
     }
@@ -56,6 +59,7 @@ export default function InputForm() {
 
   const handleReset = () => {
     setSelected(false);
+    setResult("");
   };
 
   return (
