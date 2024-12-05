@@ -1,6 +1,7 @@
 # gemini-selection
 
 Gemini selects worthy person in options.
+https://gemini-selection.vercel.app/
 
 # ローカルで使用する場合
 
