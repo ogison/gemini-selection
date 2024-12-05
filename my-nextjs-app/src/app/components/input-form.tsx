@@ -77,7 +77,7 @@ export default function InputForm() {
             選択アプリ
           </CardTitle>
           <CardDescription className="text-center">
-            {selected ? "結果" : "選択肢を入力してください"}
+            {selected ? "結果" : "選択肢を2個以上入力してください"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -120,7 +120,10 @@ export default function InputForm() {
                 <Button
                   type="submit"
                   className="w-full ml-2"
-                  disabled={isLoading}
+                  disabled={
+                    isLoading ||
+                    items.filter((item) => item.value.trim() !== "").length < 2
+                  }
                 >
                   {isLoading ? (
                     <>
