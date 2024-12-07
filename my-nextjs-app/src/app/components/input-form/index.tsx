@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Item } from "../types";
+import { Item } from "../../types";
 import {
   Card,
   CardDescription,
@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { promptFormat } from "../constants";
+import { promptFormat } from "../../constants";
 import { ContentForm } from "./content-form";
 import Cookies from "js-cookie";
 

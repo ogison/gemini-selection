@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
-import { Item } from "../types";
+import { Item } from "../../types";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
