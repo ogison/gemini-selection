@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
-import { Item } from "../types";
+import { Item } from "../../types";
 import { Dispatch, SetStateAction } from "react";
+import { Label } from "@radix-ui/react-label";
 
 interface Props {
   items: Item[];
@@ -22,6 +23,7 @@ export const SelectForm = (props: Props) => {
 
   return (
     <div className="space-y-2">
+      <Label className="whitespace-nowrap">選択肢：</Label>
       {items.map((item, index) => (
         <div key={item.id} className="flex items-center space-x-2">
           <Input
