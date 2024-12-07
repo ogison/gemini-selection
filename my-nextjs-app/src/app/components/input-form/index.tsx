@@ -20,6 +20,7 @@ export const InputForm = () => {
   const [resultReason, setResultReason] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
+  const [selectType, setSelectType] = useState<string>();
 
   // Cookieからデータを取得する
   useEffect(() => {
@@ -49,7 +50,7 @@ export const InputForm = () => {
     e.preventDefault();
     setIsLoading(true);
     const choices = items.map((item) => `- ${item.value}`).join("\n");
-    const prompt = promptFormat(choices);
+    const prompt = promptFormat(choices, selectType);
 
     try {
       const response = await fetch("/api/gemini-api", {
@@ -86,7 +87,7 @@ export const InputForm = () => {
             選択アプリ
           </CardTitle>
           <CardDescription className="text-center">
-            {selected ? "結果" : "選択肢を2個以上入力してください"}
+            {selected ? "結果" : "AIに選んでもらいたいものを入力してください"}
           </CardDescription>
         </CardHeader>
         {isLoadingContent ? (
@@ -102,6 +103,8 @@ export const InputForm = () => {
             selected={selected}
             result={result}
             resultReason={resultReason}
+            selectType={selectType}
+            setSelectType={setSelectType}
           />
         )}
         <CardFooter className="flex justify-center">

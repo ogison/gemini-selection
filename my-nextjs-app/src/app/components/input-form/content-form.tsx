@@ -6,6 +6,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CardContent } from "@/components/ui/card";
 import { Item } from "../../types";
 import { SelectForm } from "./select-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Props {
   items: Item[];
@@ -15,6 +17,8 @@ interface Props {
   selected: boolean;
   result: string | undefined;
   resultReason: string | undefined;
+  selectType: string | undefined;
+  setSelectType: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const ContentForm = ({
@@ -25,6 +29,8 @@ export const ContentForm = ({
   selected,
   result,
   resultReason,
+  selectType,
+  setSelectType,
 }: Props) => {
   const addItem = () => {
     const newId =
@@ -36,6 +42,16 @@ export const ContentForm = ({
     <CardContent>
       {!selected ? (
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label className="whitespace-nowrap">何を選ぶか：</Label>
+            <Input
+              key="selectType"
+              value={selectType ?? ""}
+              onChange={(e) => setSelectType(e.target.value)}
+              placeholder="例：幹事、旅行先、プレゼント"
+            />
+          </div>
+
           <SelectForm items={items} setItems={setItems} />
           <div className="flex justify-between items-center pt-4">
             <Button

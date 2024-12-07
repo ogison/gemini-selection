@@ -1,10 +1,10 @@
-export const promptFormat = (choices: string) => {
-  return `
+export const promptFormat = (choices: string, type: string | undefined) => {
+  let prompt = `
         ### 選択肢
         ${choices}
 
         ### 指令
-        選択肢から最もふさわしい人物を選んでください
+        最もふさわしいを選択肢選んでください
         あなたの偏見と独断で選択して、その理由も述べてください
 
         ### 出力形式
@@ -13,4 +13,15 @@ export const promptFormat = (choices: string) => {
           "理由": "{選んだ理由}"
         }
         `.trim();
+
+  if (type && type.trim() !== "") {
+    prompt =
+      prompt +
+      `
+        ### テーマ
+        ${type}
+      `.trim();
+  }
+
+  return prompt;
 };
