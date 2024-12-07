@@ -1,19 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Loader2, PlusCircle } from "lucide-react";
 import { Item } from "../types";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { promptFormat } from "../constants";
-import { SelectForm } from "./select-form";
+import { ContentForm } from "./content-form";
+import Cookies from "js-cookie";
 
 export const InputForm = () => {
   const [items, setItems] = useState<Item[]>([{ id: 1, value: "" }]);
@@ -21,12 +19,31 @@ export const InputForm = () => {
   const [result, setResult] = useState<string>();
   const [resultReason, setResultReason] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
 
-  const addItem = () => {
-    const newId =
-      items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
-    setItems([...items, { id: newId, value: "" }]);
-  };
+  // Cookieからデータを取得する
+  useEffect(() => {
+    const loadDataFromCookies = async () => {
+      try {
+        const savedItems = Cookies.get("formItems");
+        if (savedItems) {
+          const parsedItems: Item[] = JSON.parse(savedItems);
+          setItems(parsedItems);
+        }
+      } catch (error) {
+        console.error("Failed to parse cookies", error);
+      } finally {
+        setIsLoadingContent(false);
+      }
+    };
+
+    loadDataFromCookies();
+  }, []);
+
+  // Cookieに入力した選択肢を保存
+  useEffect(() => {
+    Cookies.set("formItems", JSON.stringify(items), { expires: 3 });
+  }, [items]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,49 +89,21 @@ export const InputForm = () => {
             {selected ? "結果" : "選択肢を2個以上入力してください"}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          {!selected ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <SelectForm items={items} setItems={setItems} />
-              <div className="flex justify-between items-center pt-4">
-                <Button
-                  type="button"
-                  onClick={addItem}
-                  variant="outline"
-                  className="w-full mr-2"
-                >
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  選択肢を追加
-                </Button>
-                <Button
-                  type="submit"
-                  className="w-full ml-2"
-                  disabled={
-                    isLoading ||
-                    items.filter((item) => item.value.trim() !== "").length < 2
-                  }
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      選択中...
-                    </>
-                  ) : (
-                    "選択する"
-                  )}
-                </Button>
-              </div>
-            </form>
-          ) : (
-            <Alert>
-              <CheckCircle2 className="h-4 w-4" />
-              <AlertTitle>選択結果 {result}</AlertTitle>
-              <AlertDescription className="text-lg font-semibold">
-                {resultReason}
-              </AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
+        {isLoadingContent ? (
+          <div className="flex items-center justify-center">
+            <div>Loading...</div>
+          </div>
+        ) : (
+          <ContentForm
+            items={items}
+            setItems={setItems}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+            selected={selected}
+            result={result}
+            resultReason={resultReason}
+          />
+        )}
         <CardFooter className="flex justify-center">
           {selected && (
             <Button onClick={handleReset} variant="outline">
