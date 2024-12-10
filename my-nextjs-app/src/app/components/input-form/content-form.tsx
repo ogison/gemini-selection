@@ -1,37 +1,30 @@
 "use client";
-import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Loader2, PlusCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CardContent } from "@/components/ui/card";
-import { Item } from "../../types";
 import { SelectForm } from "./select-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAppContext } from "@/app/context/AppContext";
 
 interface Props {
-  items: Item[];
-  setItems: Dispatch<SetStateAction<Item[]>>;
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   isLoading: boolean;
   selected: boolean;
   result: string | undefined;
   resultReason: string | undefined;
-  selectType: string | undefined;
-  setSelectType: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const ContentForm = ({
-  items,
-  setItems,
   handleSubmit,
   isLoading,
   selected,
   result,
   resultReason,
-  selectType,
-  setSelectType,
 }: Props) => {
+  const { items, setItems, selectType, setSelectType } = useAppContext();
+
   const addItem = () => {
     const newId =
       items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
@@ -52,7 +45,7 @@ export const ContentForm = ({
             />
           </div>
 
-          <SelectForm items={items} setItems={setItems} />
+          <SelectForm />
           <div className="flex justify-between items-center pt-4">
             <Button
               type="button"

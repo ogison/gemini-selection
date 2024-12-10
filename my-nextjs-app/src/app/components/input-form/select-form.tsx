@@ -1,17 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
-import { Item } from "../../types";
-import { Dispatch, SetStateAction } from "react";
 import { Label } from "@radix-ui/react-label";
+import { useAppContext } from "@/app/context/AppContext";
 
-interface Props {
-  items: Item[];
-  setItems: Dispatch<SetStateAction<Item[]>>;
-}
-
-export const SelectForm = (props: Props) => {
-  const { items, setItems } = props;
+export const SelectForm = () => {
+  const { items, setItems } = useAppContext();
 
   const updateItem = (id: number, value: string) => {
     setItems(items.map((item) => (item.id === id ? { ...item, value } : item)));

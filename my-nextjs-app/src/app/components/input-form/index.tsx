@@ -12,15 +12,15 @@ import {
 import { COOKIES_KEY, promptFormat } from "../../constants";
 import { ContentForm } from "./content-form";
 import Cookies from "js-cookie";
+import { useAppContext } from "@/app/context/AppContext";
 
 export const InputForm = () => {
-  const [items, setItems] = useState<Item[]>([{ id: 1, value: "" }]);
+  const { items, setItems, selectType, setSelectType } = useAppContext();
   const [selected, setSelected] = useState<boolean>(false);
   const [result, setResult] = useState<string>();
   const [resultReason, setResultReason] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
-  const [selectType, setSelectType] = useState<string>();
 
   // Cookieからデータを取得する
   useEffect(() => {
@@ -104,15 +104,11 @@ export const InputForm = () => {
           </div>
         ) : (
           <ContentForm
-            items={items}
-            setItems={setItems}
             handleSubmit={handleSubmit}
             isLoading={isLoading}
             selected={selected}
             result={result}
             resultReason={resultReason}
-            selectType={selectType}
-            setSelectType={setSelectType}
           />
         )}
         <CardFooter className="flex justify-center">

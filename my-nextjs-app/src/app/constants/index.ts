@@ -25,3 +25,8 @@ export const promptFormat = (choices: string, type: string | undefined) => {
 
   return prompt;
 };
+
+export const COOKIES_KEY = {
+  FORM_ITEMS: "formItems",
+  FORM_TYPE: "formType",
+};
