@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { promptFormat } from "../../constants";
+import { COOKIES_KEY, promptFormat } from "../../constants";
 import { ContentForm } from "./content-form";
 import Cookies from "js-cookie";
 
@@ -26,10 +26,16 @@ export const InputForm = () => {
   useEffect(() => {
     const loadDataFromCookies = async () => {
       try {
-        const savedItems = Cookies.get("formItems");
+        const savedItems = Cookies.get(COOKIES_KEY.FORM_ITEMS);
         if (savedItems) {
           const parsedItems: Item[] = JSON.parse(savedItems);
           setItems(parsedItems);
+        }
+
+        const savedType = Cookies.get(COOKIES_KEY.FORM_TYPE);
+        if (savedType) {
+          const parsedItems: string = JSON.parse(savedType);
+          setSelectType(parsedItems);
         }
       } catch (error) {
         console.error("Failed to parse cookies", error);
@@ -41,13 +47,15 @@ export const InputForm = () => {
     loadDataFromCookies();
   }, []);
 
-  // Cookieに入力した選択肢を保存
-  useEffect(() => {
-    Cookies.set("formItems", JSON.stringify(items), { expires: 3 });
-  }, [items]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Cookieに入力した選択肢を保存
+    Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
+    Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(selectType), {
+      expires: 3,
+    });
+
     setIsLoading(true);
     const choices = items.map((item) => `- ${item.value}`).join("\n");
     const prompt = promptFormat(choices, selectType);
