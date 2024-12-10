@@ -14,7 +14,7 @@ export const promptFormat = (choices: string, type: string | undefined) => {
         }
         `.trim();
 
-  if (type && type.trim() !== "") {
+  if (type && type.trim() !== '') {
     prompt =
       prompt +
       `
@@ -24,4 +24,9 @@ export const promptFormat = (choices: string, type: string | undefined) => {
   }
 
   return prompt;
+};
+
+export const COOKIES_KEY = {
+  FORM_ITEMS: 'formItems',
+  FORM_TYPE: 'formType',
 };

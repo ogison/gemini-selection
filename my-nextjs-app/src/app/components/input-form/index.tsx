@@ -1,38 +1,42 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Item } from "../../types";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { promptFormat } from "../../constants";
-import { ContentForm } from "./content-form";
-import Cookies from "js-cookie";
+'use client';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { useAppContext } from '@/app/context/AppContext';
+
+import { COOKIES_KEY, promptFormat } from '../../constants';
+import { Item } from '../../types';
+
+import { ContentForm } from './content-form';
 
 export const InputForm = () => {
-  const [items, setItems] = useState<Item[]>([{ id: 1, value: "" }]);
+  const { items, setItems, selectType, setSelectType } = useAppContext();
   const [selected, setSelected] = useState<boolean>(false);
   const [result, setResult] = useState<string>();
   const [resultReason, setResultReason] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
-  const [selectType, setSelectType] = useState<string>();
 
   // Cookieからデータを取得する
   useEffect(() => {
     const loadDataFromCookies = async () => {
       try {
-        const savedItems = Cookies.get("formItems");
+        const savedItems = Cookies.get(COOKIES_KEY.FORM_ITEMS);
         if (savedItems) {
-          const parsedItems: Item[] = JSON.parse(savedItems);
+          const parsedItems = JSON.parse(savedItems) as Item[];
           setItems(parsedItems);
         }
+
+        const savedType = Cookies.get(COOKIES_KEY.FORM_TYPE);
+        if (savedType) {
+          const parsedItems = JSON.parse(savedType) as string;
+          setSelectType(parsedItems);
+        }
       } catch (error) {
-        console.error("Failed to parse cookies", error);
+        console.error('Failed to parse cookies', error);
       } finally {
         setIsLoadingContent(false);
       }
@@ -41,29 +45,31 @@ export const InputForm = () => {
     loadDataFromCookies();
   }, []);
 
-  // Cookieに入力した選択肢を保存
-  useEffect(() => {
-    Cookies.set("formItems", JSON.stringify(items), { expires: 3 });
-  }, [items]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Cookieに入力した選択肢を保存
+    Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
+    Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(selectType), {
+      expires: 3,
+    });
+
     setIsLoading(true);
-    const choices = items.map((item) => `- ${item.value}`).join("\n");
+    const choices = items.map((item) => `- ${item.value}`).join('\n');
     const prompt = promptFormat(choices, selectType);
 
     try {
-      const response = await fetch("/api/gemini-api", {
-        method: "POST",
+      const response = await fetch('/api/gemini-api', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ prompt_post: prompt }),
       });
       // レスポンス結果をjson型に変更
       const data = await response.json();
       let message = data.message;
-      message = message.replace(/```json|```/g, "").trim();
+      message = message.replace(/```json|```/g, '').trim();
       const jsonMessage = JSON.parse(message);
 
       setResult(jsonMessage.選択結果);
@@ -76,18 +82,16 @@ export const InputForm = () => {
 
   const handleReset = () => {
     setSelected(false);
-    setResult("");
+    setResult('');
   };
 
   return (
-    <div className="min-h-screen from-blue-100 to-blue-200 flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center from-blue-100 to-blue-200 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            選択アプリ
-          </CardTitle>
+          <CardTitle className="text-center text-2xl font-bold">選択アプリ</CardTitle>
           <CardDescription className="text-center">
-            {selected ? "結果" : "AIに選んでもらいたいものを入力してください"}
+            {selected ? '結果' : 'AIに選んでもらいたいものを入力してください'}
           </CardDescription>
         </CardHeader>
         {isLoadingContent ? (
@@ -96,15 +100,11 @@ export const InputForm = () => {
           </div>
         ) : (
           <ContentForm
-            items={items}
-            setItems={setItems}
             handleSubmit={handleSubmit}
             isLoading={isLoading}
-            selected={selected}
             result={result}
             resultReason={resultReason}
-            selectType={selectType}
-            setSelectType={setSelectType}
+            selected={selected}
           />
         )}
         <CardFooter className="flex justify-center">
