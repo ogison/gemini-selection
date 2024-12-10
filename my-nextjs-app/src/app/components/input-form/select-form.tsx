@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Trash2 } from "lucide-react";
-import { Label } from "@radix-ui/react-label";
-import { useAppContext } from "@/app/context/AppContext";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Trash2 } from 'lucide-react';
+import { Label } from '@radix-ui/react-label';
+import { useAppContext } from '@/app/context/AppContext';
 
 export const SelectForm = () => {
   const { items, setItems } = useAppContext();

@@ -1,18 +1,12 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Item } from "../../types";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { COOKIES_KEY, promptFormat } from "../../constants";
-import { ContentForm } from "./content-form";
-import Cookies from "js-cookie";
-import { useAppContext } from "@/app/context/AppContext";
+'use client';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Item } from '../../types';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { COOKIES_KEY, promptFormat } from '../../constants';
+import { ContentForm } from './content-form';
+import Cookies from 'js-cookie';
+import { useAppContext } from '@/app/context/AppContext';
 
 export const InputForm = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
@@ -38,7 +32,7 @@ export const InputForm = () => {
           setSelectType(parsedItems);
         }
       } catch (error) {
-        console.error("Failed to parse cookies", error);
+        console.error('Failed to parse cookies', error);
       } finally {
         setIsLoadingContent(false);
       }
@@ -57,21 +51,21 @@ export const InputForm = () => {
     });
 
     setIsLoading(true);
-    const choices = items.map((item) => `- ${item.value}`).join("\n");
+    const choices = items.map((item) => `- ${item.value}`).join('\n');
     const prompt = promptFormat(choices, selectType);
 
     try {
-      const response = await fetch("/api/gemini-api", {
-        method: "POST",
+      const response = await fetch('/api/gemini-api', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ prompt_post: prompt }),
       });
       // レスポンス結果をjson型に変更
       const data = await response.json();
       let message = data.message;
-      message = message.replace(/```json|```/g, "").trim();
+      message = message.replace(/```json|```/g, '').trim();
       const jsonMessage = JSON.parse(message);
 
       setResult(jsonMessage.選択結果);
@@ -84,18 +78,16 @@ export const InputForm = () => {
 
   const handleReset = () => {
     setSelected(false);
-    setResult("");
+    setResult('');
   };
 
   return (
     <div className="min-h-screen from-blue-100 to-blue-200 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            選択アプリ
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">選択アプリ</CardTitle>
           <CardDescription className="text-center">
-            {selected ? "結果" : "AIに選んでもらいたいものを入力してください"}
+            {selected ? '結果' : 'AIに選んでもらいたいものを入力してください'}
           </CardDescription>
         </CardHeader>
         {isLoadingContent ? (
