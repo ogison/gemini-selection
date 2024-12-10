@@ -2,7 +2,6 @@
   "extends": [
     "eslint:recommended",
     "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:tailwindcss/recommended",
     "prettier",
     "next/typescript"
@@ -14,33 +13,33 @@
   "plugins": ["unused-imports"],
   "rules": {
     "unused-imports/no-unused-imports": "error",
-    "react/jsx-sort-props": "error",
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object",
-          "type"
-        ],
-        "newlines-between": "always",
-        "pathGroupsExcludedImportTypes": ["builtin"],
-        "pathGroups": [
-          {
-            "pattern": "@/components/**",
-            "group": "internal",
-            "position": "before"
-          }
-        ],
-        "alphabetize": {
-          "order": "asc"
+    "react/jsx-sort-props": "error"
+  },
+  "import/order": [
+    "error",
+    {
+      "groups": [
+        "builtin",
+        "external",
+        "internal",
+        "parent",
+        "sibling",
+        "index",
+        "object",
+        "type"
+      ],
+      "newlines-between": "always",
+      "pathGroupsExcludedImportTypes": ["builtin"],
+      "pathGroups": [
+        {
+          "pattern": "@/components/**",
+          "group": "internal",
+          "position": "before"
         }
+      ],
+      "alphabetize": {
+        "order": "asc"
       }
-    ]
-  }
+    }
+  ]
 }

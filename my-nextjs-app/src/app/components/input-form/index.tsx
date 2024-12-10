@@ -1,12 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Item } from '../../types';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { COOKIES_KEY, promptFormat } from '../../constants';
-import { ContentForm } from './content-form';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { useAppContext } from '@/app/context/AppContext';
+
+import { COOKIES_KEY, promptFormat } from '../../constants';
+import { Item } from '../../types';
+
+import { ContentForm } from './content-form';
 
 export const InputForm = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
@@ -22,13 +26,13 @@ export const InputForm = () => {
       try {
         const savedItems = Cookies.get(COOKIES_KEY.FORM_ITEMS);
         if (savedItems) {
-          const parsedItems: Item[] = JSON.parse(savedItems);
+          const parsedItems = JSON.parse(savedItems) as Item[];
           setItems(parsedItems);
         }
 
         const savedType = Cookies.get(COOKIES_KEY.FORM_TYPE);
         if (savedType) {
-          const parsedItems: string = JSON.parse(savedType);
+          const parsedItems = JSON.parse(savedType) as string;
           setSelectType(parsedItems);
         }
       } catch (error) {
@@ -82,10 +86,10 @@ export const InputForm = () => {
   };
 
   return (
-    <div className="min-h-screen from-blue-100 to-blue-200 flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center from-blue-100 to-blue-200 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">選択アプリ</CardTitle>
+          <CardTitle className="text-center text-2xl font-bold">選択アプリ</CardTitle>
           <CardDescription className="text-center">
             {selected ? '結果' : 'AIに選んでもらいたいものを入力してください'}
           </CardDescription>
@@ -98,9 +102,9 @@ export const InputForm = () => {
           <ContentForm
             handleSubmit={handleSubmit}
             isLoading={isLoading}
-            selected={selected}
             result={result}
             resultReason={resultReason}
+            selected={selected}
           />
         )}
         <CardFooter className="flex justify-center">
