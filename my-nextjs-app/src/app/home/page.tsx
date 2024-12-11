@@ -14,9 +14,13 @@ import { promptFormat } from '@/features/home/utils/prompt';
 
 const Home = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
-  const [selected, setSelected] = useState<boolean>(false);
+
+  // 生成AIの応答結果
   const [result, setResult] = useState<string>();
   const [resultReason, setResultReason] = useState<string>();
+
+  // ローディング
+  const [selected, setSelected] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
 
@@ -33,8 +37,7 @@ const Home = () => {
     });
 
     setIsLoading(true);
-    const choices = items.map((item) => `- ${item.value}`).join('\n');
-    const prompt = promptFormat(choices, selectType);
+    const prompt = promptFormat(items, selectType);
 
     try {
       const response = await fetch(API_ENDPOINT, {
@@ -76,7 +79,7 @@ const Home = () => {
             {!selected ? (
               <ContentForm handleSubmit={handleSubmit} isLoading={isLoading} />
             ) : (
-              <Result result={result} resultReason={resultReason} />
+              result && resultReason && <Result result={result} resultReason={resultReason} />
             )}
           </CardContent>
         )}
