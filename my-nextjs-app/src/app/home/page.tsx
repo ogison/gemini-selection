@@ -1,17 +1,17 @@
 'use client';
 import Cookies from 'js-cookie';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { COOKIES_KEY, promptFormat } from '@/features/home/constants';
+import { API_ENDPOINT, COOKIES_KEY, promptFormat, HEADERS } from '@/features/home/constants';
 import { ContentForm } from '@/features/home/components/content-form';
 import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
 import { CardHeaderComponent } from '@/features/home/components/card-header';
 import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
 
-export const Home = () => {
+const Home = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
   const [selected, setSelected] = useState<boolean>(false);
   const [result, setResult] = useState<string>();
@@ -36,11 +36,9 @@ export const Home = () => {
     const prompt = promptFormat(choices, selectType);
 
     try {
-      const response = await fetch('/api/gemini-api', {
+      const response = await fetch(API_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: HEADERS,
         body: JSON.stringify({ prompt_post: prompt }),
       });
       // レスポンス結果をjson型に変更
@@ -59,10 +57,10 @@ export const Home = () => {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setSelected(false);
     setResult('');
-  };
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center from-blue-100 to-blue-200 p-4">
@@ -93,10 +91,14 @@ export const Home = () => {
   );
 };
 
-export default function HomePage() {
+const HomePage = () => {
   return (
-    <AppProvider>
-      <Home />
-    </AppProvider>
+    <div>
+      <AppProvider>
+        <Home />
+      </AppProvider>
+    </div>
   );
-}
+};
+
+export default HomePage;
