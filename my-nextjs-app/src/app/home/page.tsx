@@ -1,18 +1,17 @@
 'use client';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { API_ENDPOINT, COOKIES_KEY, promptFormat, HEADERS } from '@/features/home/constants';
+import { ContentForm } from '@/features/home/components/content-form';
+import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
+import { CardHeaderComponent } from '@/features/home/components/card-header';
+import { Result } from '@/features/home/components/result';
+import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
 
-import { useAppContext } from '@/app/context/AppContext';
-
-import { COOKIES_KEY, promptFormat } from '../../constants';
-import { Item } from '../../types';
-
-import { ContentForm } from './content-form';
-
-export const InputForm = () => {
+const Home = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
   const [selected, setSelected] = useState<boolean>(false);
   const [result, setResult] = useState<string>();
@@ -21,29 +20,7 @@ export const InputForm = () => {
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
 
   // Cookieからデータを取得する
-  useEffect(() => {
-    const loadDataFromCookies = async () => {
-      try {
-        const savedItems = Cookies.get(COOKIES_KEY.FORM_ITEMS);
-        if (savedItems) {
-          const parsedItems = JSON.parse(savedItems) as Item[];
-          setItems(parsedItems);
-        }
-
-        const savedType = Cookies.get(COOKIES_KEY.FORM_TYPE);
-        if (savedType) {
-          const parsedItems = JSON.parse(savedType) as string;
-          setSelectType(parsedItems);
-        }
-      } catch (error) {
-        console.error('Failed to parse cookies', error);
-      } finally {
-        setIsLoadingContent(false);
-      }
-    };
-
-    loadDataFromCookies();
-  }, []);
+  useLoadCookies(setItems, setSelectType, setIsLoadingContent);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,11 +36,9 @@ export const InputForm = () => {
     const prompt = promptFormat(choices, selectType);
 
     try {
-      const response = await fetch('/api/gemini-api', {
+      const response = await fetch(API_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: HEADERS,
         body: JSON.stringify({ prompt_post: prompt }),
       });
       // レスポンス結果をjson型に変更
@@ -75,37 +50,34 @@ export const InputForm = () => {
       setResult(jsonMessage.選択結果);
       setResultReason(jsonMessage.理由);
       setSelected(true);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setSelected(false);
     setResult('');
-  };
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center from-blue-100 to-blue-200 p-4">
       <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold">選択アプリ</CardTitle>
-          <CardDescription className="text-center">
-            {selected ? '結果' : 'AIに選んでもらいたいものを入力してください'}
-          </CardDescription>
-        </CardHeader>
+        <CardHeaderComponent selected={selected} />
         {isLoadingContent ? (
           <div className="flex items-center justify-center">
-            <div>Loading...</div>
+            <div className="spinner"></div>
           </div>
         ) : (
-          <ContentForm
-            handleSubmit={handleSubmit}
-            isLoading={isLoading}
-            result={result}
-            resultReason={resultReason}
-            selected={selected}
-          />
+          <CardContent>
+            {!selected ? (
+              <ContentForm handleSubmit={handleSubmit} isLoading={isLoading} />
+            ) : (
+              <Result result={result} resultReason={resultReason} />
+            )}
+          </CardContent>
         )}
         <CardFooter className="flex justify-center">
           {selected && (
@@ -118,3 +90,15 @@ export const InputForm = () => {
     </div>
   );
 };
+
+const HomePage = () => {
+  return (
+    <div>
+      <AppProvider>
+        <Home />
+      </AppProvider>
+    </div>
+  );
+};
+
+export default HomePage;
