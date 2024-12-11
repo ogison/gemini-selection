@@ -4,12 +4,13 @@ import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { API_ENDPOINT, COOKIES_KEY, promptFormat, HEADERS } from '@/features/home/constants';
+import { API_ENDPOINT, COOKIES_KEY, HEADERS } from '@/features/home/constants';
 import { ContentForm } from '@/features/home/components/content-form';
 import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
 import { CardHeaderComponent } from '@/features/home/components/card-header';
 import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
+import { promptFormat } from '@/features/home/utils/prompt';
 
 const Home = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
