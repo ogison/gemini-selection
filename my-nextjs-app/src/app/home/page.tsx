@@ -4,18 +4,23 @@ import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { API_ENDPOINT, COOKIES_KEY, promptFormat, HEADERS } from '@/features/home/constants';
+import { API_ENDPOINT, COOKIES_KEY, HEADERS } from '@/features/home/constants';
 import { ContentForm } from '@/features/home/components/content-form';
 import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
 import { CardHeaderComponent } from '@/features/home/components/card-header';
 import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
+import { promptFormat } from '@/features/home/utils/prompt';
+import { ResultType } from '@/features/home/types';
 
 const Home = () => {
   const { items, setItems, selectType, setSelectType } = useAppContext();
+
+  // 生成AIの応答結果
+  const [result, setResult] = useState<ResultType>();
+
+  // ローディング
   const [selected, setSelected] = useState<boolean>(false);
-  const [result, setResult] = useState<string>();
-  const [resultReason, setResultReason] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
 
@@ -32,8 +37,7 @@ const Home = () => {
     });
 
     setIsLoading(true);
-    const choices = items.map((item) => `- ${item.value}`).join('\n');
-    const prompt = promptFormat(choices, selectType);
+    const prompt = promptFormat(items, selectType);
 
     try {
       const response = await fetch(API_ENDPOINT, {
@@ -47,8 +51,7 @@ const Home = () => {
       message = message.replace(/```json|```/g, '').trim();
       const jsonMessage = JSON.parse(message);
 
-      setResult(jsonMessage.選択結果);
-      setResultReason(jsonMessage.理由);
+      setResult({ selection: jsonMessage.選択結果, reason: jsonMessage.理由 });
       setSelected(true);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -59,7 +62,7 @@ const Home = () => {
 
   const handleReset = useCallback(() => {
     setSelected(false);
-    setResult('');
+    setResult({ selection: '', reason: '' });
   }, []);
 
   return (
@@ -75,7 +78,7 @@ const Home = () => {
             {!selected ? (
               <ContentForm handleSubmit={handleSubmit} isLoading={isLoading} />
             ) : (
-              <Result result={result} resultReason={resultReason} />
+              result && <Result result={result} />
             )}
           </CardContent>
         )}
