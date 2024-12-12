@@ -5,19 +5,19 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { makeText } from '../utils/prompt';
+import { ResultType } from '../types';
 
 interface Props {
-  result: string;
-  resultReason: string;
+  result: ResultType;
 }
 
 export const Result = (props: Props) => {
-  const { result, resultReason } = props;
+  const { result } = props;
   const { items, selectType } = useAppContext();
   const [copied, setCopied] = useState<boolean>(false);
 
   const copyText = async () => {
-    const textToCopy = makeText(items, selectType, result, resultReason);
+    const textToCopy = makeText(items, selectType, result);
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
@@ -30,8 +30,8 @@ export const Result = (props: Props) => {
   return (
     <Alert>
       <CheckCircle2 className="size-4" />
-      <AlertTitle>選択結果 {result}</AlertTitle>
-      <AlertDescription className="mt-4 text-lg font-semibold">{resultReason}</AlertDescription>
+      <AlertTitle>選択結果 {result.selection}</AlertTitle>
+      <AlertDescription className="mt-4 text-lg font-semibold">{result.reason}</AlertDescription>
       <Button
         size="icon"
         variant="ghost"

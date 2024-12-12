@@ -1,4 +1,4 @@
-import { Item } from '../types';
+import { Item, ResultType } from '../types';
 
 export const promptFormat = (items: Item[], type: string | undefined) => {
   const choices = items.map((item) => `- ${item.value}`).join('\n');
@@ -29,16 +29,16 @@ export const promptFormat = (items: Item[], type: string | undefined) => {
   return prompt;
 };
 
-export const makeText = (items: Item[], type: string | undefined, result: string, resultReason: string) => {
+export const makeText = (items: Item[], type: string | undefined, result: ResultType) => {
   const choices = items.map((item) => `・ ${item.value}`).join('\n');
   let text = `### 選択肢
 ${choices}
 
 ### 選択結果
-${result}
+${result.selection}
 
 ### 理由
-${resultReason}
+${result.reason}
 `.trim();
   if (type && type.trim() !== '') {
     text = `### テーマ
