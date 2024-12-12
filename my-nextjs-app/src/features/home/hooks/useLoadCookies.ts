@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
 import { loadDataFromCookies } from '../utils/cookies';
+import { UseFormReturn } from 'react-hook-form';
+import { FormSchemaType } from '../types';
 
 export const useLoadCookies = (
-  setItems: (items: any[]) => void,
-  setSelectType: (type: string) => void,
+  form: UseFormReturn<FormSchemaType>,
   setIsLoadingContent: (isLoading: boolean) => void,
 ) => {
   useEffect(() => {
     const { parsedItems, parsedType } = loadDataFromCookies();
-    setItems(parsedItems);
-    setSelectType(parsedType);
+    form.setValue('items', parsedItems);
+    form.setValue('type', parsedType);
     setIsLoadingContent(false);
-  }, [setItems, setSelectType, setIsLoadingContent]);
+  }, [setIsLoadingContent]);
 };

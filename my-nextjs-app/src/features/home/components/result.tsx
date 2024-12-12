@@ -13,11 +13,11 @@ interface Props {
 
 export const Result = (props: Props) => {
   const { result } = props;
-  const { items, selectType } = useAppContext();
+  const { form } = useAppContext();
   const [copied, setCopied] = useState<boolean>(false);
 
   const copyText = async () => {
-    const textToCopy = makeText(items, selectType, result);
+    const textToCopy = makeText(form.getValues('items'), form.getValues('type'), result);
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopied(true);

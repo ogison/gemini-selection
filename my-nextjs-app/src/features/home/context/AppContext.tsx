@@ -1,13 +1,11 @@
 'use client';
-import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 
-import { Item } from '../types';
+import { FormSchemaType } from '../types';
+import { useForm, UseFormReturn } from 'react-hook-form';
 
 type AppContextType = {
-  items: Item[];
-  setItems: Dispatch<SetStateAction<Item[]>>;
-  selectType: string | undefined;
-  setSelectType: Dispatch<SetStateAction<string | undefined>>;
+  form: UseFormReturn<FormSchemaType>;
 };
 
 // Contextを作成
@@ -16,14 +14,15 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Providerを作成
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   // 入力Formを管理
-  const [items, setItems] = useState<Item[]>([{ id: 1, value: '' }]);
-  const [selectType, setSelectType] = useState<string>();
+  const form = useForm<FormSchemaType>({
+    defaultValues: {
+      type: '',
+      items: [{ id: 1, value: '' }],
+    },
+  });
 
   const value: AppContextType = {
-    items,
-    setItems,
-    selectType,
-    setSelectType,
+    form,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
