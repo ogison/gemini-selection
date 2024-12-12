@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { useAppContext } from '../context/AppContext';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 interface Props {
@@ -21,11 +21,14 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
     control: form.control,
   });
 
+  const items = useWatch({
+    name: 'items',
+    control: form.control,
+  });
+
   const addItem = () => {
-    const newId =
-      form.getValues('items').length > 0 ? Math.max(...form.getValues('items').map((item) => item.id)) + 1 : 1;
+    const newId = items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
     append({ id: newId, value: '' });
-    console.log(remove);
   };
 
   return (
@@ -57,7 +60,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
           {fields.map((item, index) => (
             <div key={item.id}>
               <FormField
-                name={`items.${index}.id`}
+                name={`items.${index}.value`}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -68,12 +71,12 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
                           onChange={(e) => field.onChange(e.target.value)}
                           placeholder={`選択肢 ${index + 1}`}
                           type="text"
-                          value={item.value}
+                          value={field.value}
                         />
                         <Button
                           aria-label={`選択肢 ${index + 1} を削除`}
                           className="shrink-0"
-                          onClick={() => remove(item.id)}
+                          onClick={() => remove(index)}
                           size="icon"
                           type="button"
                           variant="destructive"
@@ -96,7 +99,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
           </Button>
           <Button
             className="ml-2 w-full"
-            disabled={isLoading || form.getValues('items').filter((item) => item.value.trim() !== '').length < 2}
+            disabled={isLoading || items.filter((item) => item.value.trim() !== '').length < 2}
             type="submit"
           >
             {isLoading ? (
