@@ -14,7 +14,7 @@ import { promptFormat } from '@/features/home/utils/prompt';
 import { ResultType } from '@/features/home/types';
 
 const Home = () => {
-  const { items, setItems, selectType, setSelectType } = useAppContext();
+  const { form } = useAppContext();
 
   // 生成AIの応答結果
   const [result, setResult] = useState<ResultType>();
@@ -25,10 +25,12 @@ const Home = () => {
   const [isLoadingContent, setIsLoadingContent] = useState<boolean>(true);
 
   // Cookieからデータを取得する
-  useLoadCookies(setItems, setSelectType, setIsLoadingContent);
+  useLoadCookies(form, setIsLoadingContent);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const items = form.getValues('items');
+    const selectType = form.getValues('type');
 
     // Cookieに入力した選択肢を保存
     Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
