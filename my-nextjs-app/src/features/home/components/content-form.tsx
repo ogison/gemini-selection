@@ -40,10 +40,10 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>何を選ぶか：</FormLabel>
+                <FormLabel>何を選ぶか（任意）：</FormLabel>
                 <FormControl>
                   <Input
-                    key="selectType"
+                    key="type"
                     onChange={(e) => field.onChange(e.target.value)}
                     placeholder="例：幹事、旅行先、プレゼント"
                     value={field.value ?? ''}
@@ -56,7 +56,28 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
         </div>
 
         <div className="space-y-2">
-          <FormLabel>選択肢：</FormLabel>
+          <FormField
+            control={form.control}
+            name="bias"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>前提条件（任意）：</FormLabel>
+                <FormControl>
+                  <Input
+                    key="bias"
+                    onChange={(e) => field.onChange(e.target.value)}
+                    placeholder="例：予算は5千円以内、雨天"
+                    value={field.value ?? ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <FormLabel>選択肢（必須）：</FormLabel>
           {fields.map((item, index) => (
             <div key={item.id}>
               <FormField

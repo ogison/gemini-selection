@@ -30,16 +30,18 @@ const Home = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const items = form.getValues('items');
-    const selectType = form.getValues('type');
+    const type = form.getValues('type');
+    const bias = form.getValues('bias');
 
     // Cookieに入力した選択肢を保存
-    Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
-    Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(selectType), {
+    Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(type), {
       expires: 3,
     });
+    Cookies.set(COOKIES_KEY.FORM_BIAS, JSON.stringify(bias), { expires: 3 });
+    Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
 
     setIsLoading(true);
-    const prompt = promptFormat(items, selectType);
+    const prompt = promptFormat(items, type, bias);
 
     try {
       const response = await fetch(API_ENDPOINT, {

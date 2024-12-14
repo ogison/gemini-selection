@@ -8,9 +8,10 @@ export const useLoadCookies = (
   setIsLoadingContent: (isLoading: boolean) => void,
 ) => {
   useEffect(() => {
-    const { parsedItems, parsedType } = loadDataFromCookies();
+    const { parsedItems, parsedType, parsedBias } = loadDataFromCookies();
     form.setValue('items', parsedItems);
     form.setValue('type', parsedType);
+    form.setValue('bias', parsedBias || '');
     setIsLoadingContent(false);
   }, [setIsLoadingContent]);
 };
