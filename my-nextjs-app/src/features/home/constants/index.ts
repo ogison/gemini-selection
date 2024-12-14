@@ -1,6 +1,7 @@
 export const COOKIES_KEY = {
-  FORM_ITEMS: 'formItems',
   FORM_TYPE: 'formType',
+  FORM_BIAS: 'formBias',
+  FORM_ITEMS: 'formItems',
 };
 
 export const API_ENDPOINT = '/api/gemini-api';

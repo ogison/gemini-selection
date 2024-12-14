@@ -17,6 +17,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const form = useForm<FormSchemaType>({
     defaultValues: {
       type: '',
+      bias: '',
       items: [{ id: 1, value: '' }],
     },
   });

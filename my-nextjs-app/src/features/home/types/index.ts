@@ -22,6 +22,7 @@ export const itemSchema = z.object({
 
 export const formSchema = z.object({
   type: z.string(),
+  bias: z.string(),
   items: z.array(itemSchema),
 });
 

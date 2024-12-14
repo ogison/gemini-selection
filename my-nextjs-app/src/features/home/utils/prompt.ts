@@ -1,6 +1,6 @@
 import { Item, ResultType } from '../types';
 
-export const promptFormat = (items: Item[], type: string | undefined) => {
+export const promptFormat = (items: Item[], type: string | undefined, bias: string | undefined) => {
   const choices = items.map((item) => `- ${item.value}`).join('\n');
   let prompt = `
           ### 選択肢
@@ -17,6 +17,15 @@ export const promptFormat = (items: Item[], type: string | undefined) => {
           }
           `.trim();
 
+  if (bias && bias.trim() !== '') {
+    prompt =
+      prompt +
+      `
+        ### 前提条件
+        ${bias}
+      `.trim();
+  }
+
   if (type && type.trim() !== '') {
     prompt =
       prompt +
@@ -29,7 +38,7 @@ export const promptFormat = (items: Item[], type: string | undefined) => {
   return prompt;
 };
 
-export const makeText = (items: Item[], type: string | undefined, result: ResultType) => {
+export const makeText = (items: Item[], type: string | undefined, bias: string | undefined, result: ResultType) => {
   const choices = items.map((item) => `・ ${item.value}`).join('\n');
   let text = `### 選択肢
 ${choices}
@@ -40,6 +49,15 @@ ${result.selection}
 ### 理由
 ${result.reason}
 `.trim();
+
+  if (bias && bias.trim() !== '') {
+    text = `### 前提条件
+${bias}
+
+${text}
+`.trim();
+  }
+
   if (type && type.trim() !== '') {
     text = `### テーマ
 ${type}

@@ -17,7 +17,7 @@ export const Result = (props: Props) => {
   const [copied, setCopied] = useState<boolean>(false);
 
   const copyText = async () => {
-    const textToCopy = makeText(form.getValues('items'), form.getValues('type'), result);
+    const textToCopy = makeText(form.getValues('items'), form.getValues('type'), form.getValues('bias'), result);
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
