@@ -2,13 +2,13 @@
 import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 import { useAppContext } from '../context/AppContext';
 import { useFieldArray, useWatch } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { InputForm } from '@/components/form-input';
 import { FormSchemaType } from '../types';
+import { ChoicesComponent } from './choices-component';
 
 interface Props {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
@@ -55,41 +55,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
         </div>
 
         <div className="space-y-2">
-          <FormLabel>選択肢（必須）：</FormLabel>
-          {fields.map((item, index) => (
-            <div key={item.id}>
-              <FormField
-                name={`items.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="flex items-center space-x-2" key={item.id}>
-                        <Input
-                          aria-label={`選択肢 ${index + 1}`}
-                          className="grow"
-                          onChange={(e) => field.onChange(e.target.value)}
-                          placeholder={`選択肢 ${index + 1}`}
-                          type="text"
-                          value={field.value}
-                        />
-                        <Button
-                          aria-label={`選択肢 ${index + 1} を削除`}
-                          className="shrink-0"
-                          onClick={() => remove(index)}
-                          size="icon"
-                          type="button"
-                          variant="destructive"
-                        >
-                          <Trash2 className="size-4" />
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          ))}
+          <ChoicesComponent fields={fields} remove={remove} />
         </div>
         <div className="flex items-center justify-between pt-4">
           <Button className="mr-2 w-full" onClick={addItem} type="button" variant="outline">
