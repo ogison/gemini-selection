@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { useAppContext } from '../context/AppContext';
 import { useFieldArray, useWatch } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { InputForm } from '@/components/form-input';
+import { FormSchemaType } from '../types';
 
 interface Props {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
@@ -35,44 +37,20 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
     <Form {...form}>
       <form className="space-y-4" onSubmit={(e) => void handleSubmit(e)}>
         <div className="space-y-2">
-          <FormField
+          <InputForm<FormSchemaType>
             control={form.control}
             name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>何を選ぶか（任意）：</FormLabel>
-                <FormControl>
-                  <Input
-                    key="type"
-                    onChange={(e) => field.onChange(e.target.value)}
-                    placeholder="例：幹事、旅行先、プレゼント"
-                    value={field.value ?? ''}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="何を選ぶか（任意）："
+            placeholder="例：幹事、旅行先、プレゼント"
           />
         </div>
 
         <div className="space-y-2">
-          <FormField
+          <InputForm<FormSchemaType>
             control={form.control}
             name="bias"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>前提条件（任意）：</FormLabel>
-                <FormControl>
-                  <Input
-                    key="bias"
-                    onChange={(e) => field.onChange(e.target.value)}
-                    placeholder="例：予算は5千円以内、雨天"
-                    value={field.value ?? ''}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="前提条件（任意）："
+            placeholder="例：予算は5千円以内、雨天"
           />
         </div>
 
