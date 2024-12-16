@@ -1,6 +1,11 @@
-import { Item, ResultType } from '../types';
+import { UseFormReturn } from 'react-hook-form';
+import { FormSchemaType, Item, ResultType } from '../types';
 
-export const promptFormat = (items: Item[], type: string | undefined, bias: string | undefined) => {
+export const promptFormat = (form: UseFormReturn<FormSchemaType>) => {
+  const items = form.getValues('items');
+  const type = form.getValues('type');
+  const bias = form.getValues('bias');
+
   const choices = items.map((item) => `- ${item.value}`).join('\n');
   let prompt = `
           ### 選択肢

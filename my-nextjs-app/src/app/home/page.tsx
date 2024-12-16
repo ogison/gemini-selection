@@ -12,6 +12,7 @@ import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
 import { promptFormat } from '@/features/home/utils/prompt';
 import { ResultType } from '@/features/home/types';
+import { setCookies } from '@/features/home/utils/cookies';
 
 const Home = () => {
   const { form } = useAppContext();
@@ -27,36 +28,34 @@ const Home = () => {
   // Cookieからデータを取得する
   useLoadCookies(form, setIsLoadingContent);
 
+  const fetchData = async (prompt: string) => {
+    const response = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({ prompt_post: prompt }),
+    });
+    return response.json();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const items = form.getValues('items');
-    const type = form.getValues('type');
-    const bias = form.getValues('bias');
-
     // Cookieに入力した選択肢を保存
-    Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(type), {
-      expires: 3,
-    });
-    Cookies.set(COOKIES_KEY.FORM_BIAS, JSON.stringify(bias), { expires: 3 });
-    Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
-
+    setCookies(form);
     setIsLoading(true);
-    const prompt = promptFormat(items, type, bias);
+
+    const prompt = promptFormat(form);
 
     try {
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: HEADERS,
-        body: JSON.stringify({ prompt_post: prompt }),
-      });
-      // レスポンス結果をjson型に変更
-      const data = await response.json();
-      let message = data.message;
-      message = message.replace(/```json|```/g, '').trim();
-      const jsonMessage = JSON.parse(message);
+      const data = await fetchData(prompt);
+      const message = data.message.replace(/```json|```/g, '').trim();
+      try {
+        const jsonMessage = JSON.parse(message);
 
-      setResult({ selection: jsonMessage.選択結果, reason: jsonMessage.理由 });
-      setSelected(true);
+        setResult({ selection: jsonMessage.選択結果, reason: jsonMessage.理由 });
+        setSelected(true);
+      } catch (error) {
+        console.error('JSON parsing failed:', error);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
