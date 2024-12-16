@@ -30,15 +30,12 @@ const Home = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const items = form.getValues('items');
-    const type = form.getValues('type');
-    const bias = form.getValues('bias');
 
     // Cookieに入力した選択肢を保存
     setCookies(form);
 
     setIsLoading(true);
-    const prompt = promptFormat(items, type, bias);
+    const prompt = promptFormat(form);
 
     try {
       const response = await fetch(API_ENDPOINT, {
