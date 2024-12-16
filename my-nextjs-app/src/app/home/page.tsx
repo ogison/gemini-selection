@@ -12,6 +12,7 @@ import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
 import { promptFormat } from '@/features/home/utils/prompt';
 import { ResultType } from '@/features/home/types';
+import { setCookies } from '@/features/home/utils/cookies';
 
 const Home = () => {
   const { form } = useAppContext();
@@ -34,11 +35,7 @@ const Home = () => {
     const bias = form.getValues('bias');
 
     // Cookieに入力した選択肢を保存
-    Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(type), {
-      expires: 3,
-    });
-    Cookies.set(COOKIES_KEY.FORM_BIAS, JSON.stringify(bias), { expires: 3 });
-    Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
+    setCookies(form);
 
     setIsLoading(true);
     const prompt = promptFormat(items, type, bias);

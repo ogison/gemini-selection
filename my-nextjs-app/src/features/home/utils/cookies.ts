@@ -1,6 +1,19 @@
 import { COOKIES_KEY } from '@/features/home/constants';
-import { Item } from '@/features/home/types';
+import { FormSchemaType, Item } from '@/features/home/types';
 import Cookies from 'js-cookie';
+import { UseFormReturn } from 'react-hook-form';
+
+export const setCookies = (form: UseFormReturn<FormSchemaType>) => {
+  const items = form.getValues('items');
+  const type = form.getValues('type');
+  const bias = form.getValues('bias');
+
+  Cookies.set(COOKIES_KEY.FORM_TYPE, JSON.stringify(type), {
+    expires: 3,
+  });
+  Cookies.set(COOKIES_KEY.FORM_BIAS, JSON.stringify(bias), { expires: 3 });
+  Cookies.set(COOKIES_KEY.FORM_ITEMS, JSON.stringify(items), { expires: 3 });
+};
 
 export const loadDataFromCookies = () => {
   try {
