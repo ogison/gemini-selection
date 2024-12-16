@@ -1,18 +1,15 @@
 'use client';
-import Cookies from 'js-cookie';
 import { useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { API_ENDPOINT, COOKIES_KEY, HEADERS } from '@/features/home/constants';
 import { ContentForm } from '@/features/home/components/content-form';
 import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
 import { CardHeaderComponent } from '@/features/home/components/card-header';
 import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
-import { promptFormat } from '@/features/home/utils/prompt';
 import { ResultType } from '@/features/home/types';
-import { setCookies } from '@/features/home/utils/cookies';
+import { handleSubmit } from '@/features/home/handlers/handleSubmit';
 
 const Home = () => {
   const { form } = useAppContext();
@@ -28,40 +25,7 @@ const Home = () => {
   // Cookieからデータを取得する
   useLoadCookies(form, setIsLoadingContent);
 
-  const fetchData = async (prompt: string) => {
-    const response = await fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: HEADERS,
-      body: JSON.stringify({ prompt_post: prompt }),
-    });
-    return response.json();
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Cookieに入力した選択肢を保存
-    setCookies(form);
-    setIsLoading(true);
-
-    const prompt = promptFormat(form);
-
-    try {
-      const data = await fetchData(prompt);
-      const message = data.message.replace(/```json|```/g, '').trim();
-      try {
-        const jsonMessage = JSON.parse(message);
-
-        setResult({ selection: jsonMessage.選択結果, reason: jsonMessage.理由 });
-        setSelected(true);
-      } catch (error) {
-        console.error('JSON parsing failed:', error);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleSubmitCallback = (e: React.FormEvent) => handleSubmit(e, form, setIsLoading, setSelected, setResult);
 
   const handleReset = useCallback(() => {
     setSelected(false);
@@ -79,7 +43,7 @@ const Home = () => {
         ) : (
           <CardContent>
             {!selected ? (
-              <ContentForm handleSubmit={handleSubmit} isLoading={isLoading} />
+              <ContentForm handleSubmit={handleSubmitCallback} isLoading={isLoading} />
             ) : (
               result && <Result result={result} />
             )}
