@@ -1,5 +1,5 @@
 'use client';
-import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -18,7 +18,7 @@ interface Props {
 export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
   const { form } = useAppContext();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     name: 'items',
     control: form.control,
   });
@@ -55,7 +55,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
         </div>
 
         <div className="space-y-2">
-          <ChoicesComponent fields={fields} remove={remove} />
+          <ChoicesComponent fields={fields} remove={remove} move={move} />
         </div>
         <div className="flex items-center justify-between pt-4">
           <Button className="mr-2 w-full" onClick={addItem} type="button" variant="outline">
