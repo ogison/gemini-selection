@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Item } from '../types';
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { AlignJustify, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 interface Props {
@@ -15,18 +15,17 @@ interface Props {
 
 const DraggableRow = (props: Props) => {
   const { item, id, index, remove } = props;
-  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({ id });
+  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({ id });
 
   return (
     <div
       key={id}
       ref={setNodeRef}
-      {...attributes}
-      {...listeners}
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
       }}
+      {...attributes}
     >
       <FormField
         name={`items.${index}.value`}
@@ -34,6 +33,7 @@ const DraggableRow = (props: Props) => {
           <FormItem>
             <FormControl>
               <div className="flex items-center space-x-2" key={item.id}>
+                <AlignJustify {...listeners} />
                 <Input
                   aria-label={`選択肢 ${index + 1}`}
                   className="grow"
