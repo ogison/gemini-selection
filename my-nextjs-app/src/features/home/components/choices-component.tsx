@@ -4,6 +4,7 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { FormLabel } from '@/components/ui/form';
 import { Item } from '../types';
 import DraggableRow from './choices-row';
+import { t } from 'i18next';
 
 interface Props {
   fields: Item[];
@@ -21,7 +22,7 @@ export const ChoicesComponent = (props: Props) => {
 
   return (
     <>
-      <FormLabel>選択肢（必須）：</FormLabel>
+      <FormLabel>{t('OPTION')}</FormLabel>
       <DndContext onDragEnd={handleDragEnd}>
         <SortableContext items={fields}>
           {fields.map((item, index) => (

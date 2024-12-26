@@ -5,6 +5,7 @@ import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/f
 import { Button } from '@/components/ui/button';
 import { AlignJustify, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { t } from 'i18next';
 
 interface Props {
   item: Item;
@@ -35,15 +36,15 @@ const DraggableRow = (props: Props) => {
               <div className="flex items-center space-x-2" key={item.id}>
                 <AlignJustify {...listeners} />
                 <Input
-                  aria-label={`選択肢 ${index + 1}`}
+                  aria-label={`${t('ROW_SELECTION')} ${index + 1}`}
                   className="grow"
                   onChange={(e) => field.onChange(e.target.value)}
-                  placeholder={`選択肢 ${index + 1}`}
+                  placeholder={`${t('ROW_SELECTION')} ${index + 1}`}
                   type="text"
                   value={field.value}
                 />
                 <Button
-                  aria-label={`選択肢 ${index + 1} を削除`}
+                  aria-label={`${t('ROW_SELECTION')} ${index + 1} ${t('ROW_REMOVE')}`}
                   className="shrink-0"
                   onClick={() => remove(index)}
                   size="icon"

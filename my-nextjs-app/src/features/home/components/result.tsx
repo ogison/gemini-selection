@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { makeText } from '../utils/prompt';
 import { ResultType } from '../types';
+import { t } from 'i18next';
 
 interface Props {
   result: ResultType;
@@ -30,7 +31,9 @@ export const Result = (props: Props) => {
   return (
     <Alert>
       <CheckCircle2 className="size-4" />
-      <AlertTitle>選択結果 {result.selection}</AlertTitle>
+      <AlertTitle>
+        {t('RESULT_TITLE')} {result.selection}
+      </AlertTitle>
       <AlertDescription className="mt-4 text-lg font-semibold">{result.reason}</AlertDescription>
       <Button
         size="icon"
@@ -39,7 +42,7 @@ export const Result = (props: Props) => {
         onClick={copyText}
       >
         {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-        <span className="sr-only">結果をコピー</span>
+        <span className="sr-only">{t('COPY_BUTTON')}</span>
       </Button>
     </Alert>
   );

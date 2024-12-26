@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 
 import localFont from 'next/font/local';
-
+import i18n from 'i18next';
 import './globals.css';
+import { i18nextInitOptions } from '@/config/i18nextInitOptions';
+import { I18nProvider } from './provider/proveider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -20,14 +22,26 @@ export const metadata: Metadata = {
   description: 'Smart decision-making with AI for any situation.',
 };
 
+i18n.init(i18nextInitOptions, (err) => {
+  if (err) {
+    console.error('i18next failed to initialize', err);
+  }
+});
+
 export default function RootLayout({
   children,
+  params: { locale },
 }: Readonly<{
   children: React.ReactNode;
+  params: {
+    locale: string;
+  };
 }>) {
   return (
-    <html lang="ja">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <html lang={locale}>
+      <I18nProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      </I18nProvider>
     </html>
   );
 }

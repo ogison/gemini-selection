@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
       permanent: false,
     },
   ],
+  i18n: {
+    locales: ["en", "ja"],
+    defaultLocale: "ja",
+    localeDetection: false,
+  },
 };
 
 export default nextConfig;
