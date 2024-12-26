@@ -9,6 +9,7 @@ import { Form } from '@/components/ui/form';
 import { InputForm } from '@/components/form-input';
 import { FormSchemaType } from '../types';
 import { ChoicesComponent } from './choices-component';
+import { t } from 'i18next';
 
 interface Props {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
@@ -40,8 +41,8 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
           <InputForm<FormSchemaType>
             control={form.control}
             name="type"
-            label="何を選ぶか（任意）："
-            placeholder="例：幹事、旅行先、プレゼント"
+            label={t('SELECTION_TYPE')}
+            placeholder={t('TYPE_PLACEHOLDER')}
           />
         </div>
 
@@ -49,8 +50,8 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
           <InputForm<FormSchemaType>
             control={form.control}
             name="bias"
-            label="前提条件（任意）："
-            placeholder="例：予算は5千円以内、雨天"
+            label={t('SELECTION_BIAS')}
+            placeholder={t('BIAS_PLACEHOLDER')}
           />
         </div>
 
@@ -60,7 +61,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
         <div className="flex items-center justify-between pt-4">
           <Button className="mr-2 w-full" onClick={addItem} type="button" variant="outline">
             <PlusCircle className="mr-2 size-4" />
-            選択肢を追加
+            {t('ADD_OPTION')}
           </Button>
           <Button
             className="ml-2 w-full"
@@ -70,10 +71,10 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 size-4 animate-spin" />
-                選択中...
+                {t('SELECTING')}
               </>
             ) : (
-              '選択する'
+              t('SELECT_BUTTON')
             )}
           </Button>
         </div>
