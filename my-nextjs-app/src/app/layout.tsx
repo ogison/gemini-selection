@@ -28,17 +28,16 @@ i18n.init(i18nextInitOptions, (err) => {
   }
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: {
-    locale: string;
-  };
+  params: Promise<{ locale: string }>;
 }>) {
+  const resolvedParams = await params;
   return (
-    <html lang={locale}>
+    <html lang={resolvedParams.locale}>
       <I18nProvider>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
       </I18nProvider>
