@@ -36,15 +36,15 @@ const DraggableRow = (props: Props) => {
               <div className="flex items-center space-x-2" key={item.id}>
                 <AlignJustify {...listeners} />
                 <Input
-                  aria-label={`${t('ROW_SELECTION')} ${index + 1}`}
+                  aria-label={`${t('CHOICES')} ${index + 1}`}
                   className="grow"
                   onChange={(e) => field.onChange(e.target.value)}
-                  placeholder={`${t('ROW_SELECTION')} ${index + 1}`}
+                  placeholder={`${t('CHOICES')} ${index + 1}`}
                   type="text"
                   value={field.value}
                 />
                 <Button
-                  aria-label={`${t('ROW_SELECTION')} ${index + 1} ${t('ROW_REMOVE')}`}
+                  aria-label={`${t('CHOICES')} ${index + 1} ${t('ROW_REMOVE')}`}
                   className="shrink-0"
                   onClick={() => remove(index)}
                   size="icon"

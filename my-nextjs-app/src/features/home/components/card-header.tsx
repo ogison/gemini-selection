@@ -9,7 +9,7 @@ export const CardHeaderComponent = (props: Props) => {
   const { selected } = props;
   return (
     <CardHeader>
-      <CardTitle className="text-center text-2xl font-bold">選択アプリ</CardTitle>
+      <CardTitle className="text-center text-2xl font-bold">{t('TITLE')}</CardTitle>
       <CardDescription className="text-center">{selected ? t('RESULT') : t('SELECTION')}</CardDescription>
     </CardHeader>
   );

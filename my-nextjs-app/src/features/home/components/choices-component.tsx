@@ -22,7 +22,10 @@ export const ChoicesComponent = (props: Props) => {
 
   return (
     <>
-      <FormLabel>{t('OPTION')}</FormLabel>
+      <FormLabel>
+        {t('CHOICES')}
+        {t('REQUIRED')}
+      </FormLabel>
       <DndContext onDragEnd={handleDragEnd}>
         <SortableContext items={fields}>
           {fields.map((item, index) => (
