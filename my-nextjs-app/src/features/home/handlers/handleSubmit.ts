@@ -3,6 +3,7 @@ import { fetchData } from '../api/fetchData';
 import { FormSchemaType, ResultType } from '../types';
 import { setCookies } from '../utils/cookies';
 import { promptFormat } from '../utils/prompt';
+import { t } from 'i18next';
 
 export const handleSubmit = async (
   e: React.FormEvent,
@@ -17,6 +18,8 @@ export const handleSubmit = async (
   setIsLoading(true);
 
   const prompt = promptFormat(form);
+  const resultTitle = t('RESULT_TITLE');
+  const reason = t('REASON');
 
   try {
     const data = await fetchData(prompt);
@@ -24,7 +27,7 @@ export const handleSubmit = async (
     try {
       const jsonMessage = JSON.parse(message);
 
-      setResult({ selection: jsonMessage.選択結果, reason: jsonMessage.理由 });
+      setResult({ selection: jsonMessage[resultTitle], reason: jsonMessage[reason] });
       setSelected(true);
     } catch (error) {
       console.error('JSON parsing failed:', error);

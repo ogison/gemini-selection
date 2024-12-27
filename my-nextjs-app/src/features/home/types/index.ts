@@ -27,3 +27,5 @@ export const formSchema = z.object({
 });
 
 export type FormSchemaType = z.infer<typeof formSchema>;
+
+export type Language = 'ja' | 'en';

@@ -41,7 +41,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
           <InputForm<FormSchemaType>
             control={form.control}
             name="type"
-            label={t('SELECTION_TYPE')}
+            label={`${t('SELECTION_TYPE')}${t('OPTIONAL')}`}
             placeholder={t('TYPE_PLACEHOLDER')}
           />
         </div>
@@ -50,7 +50,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
           <InputForm<FormSchemaType>
             control={form.control}
             name="bias"
-            label={t('SELECTION_BIAS')}
+            label={`${t('SELECTION_BIAS')}${t('OPTIONAL')}`}
             placeholder={t('BIAS_PLACEHOLDER')}
           />
         </div>

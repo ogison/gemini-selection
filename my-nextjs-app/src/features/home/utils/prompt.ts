@@ -1,5 +1,6 @@
 import { UseFormReturn } from 'react-hook-form';
 import { FormSchemaType, Item, ResultType } from '../types';
+import { t } from 'i18next';
 
 export const promptFormat = (form: UseFormReturn<FormSchemaType>) => {
   const items = form.getValues('items');
@@ -8,17 +9,17 @@ export const promptFormat = (form: UseFormReturn<FormSchemaType>) => {
 
   const choices = items.map((item) => `- ${item.value}`).join('\n');
   let prompt = `
-          ### 選択肢
+          ### ${t('CHOICES')}
           ${choices}
   
-          ### 指令
-          最もふさわしいを選択肢選んでください
-          あなたの偏見と独断で選択して、その理由も述べてください
+          ### ${t('OUTPUT_FORMAT_TITLE')}
+          ${t('OUTPUT_FORMAT_DESCRIPTION1')}
+          ${t('OUTPUT_FORMAT_DESCRIPTION2')}
   
-          ### 出力形式
+          ### ${t('INSTRUCTION_TITLE')}
           {
-            "選択結果": "{選んだ選択肢}",
-            "理由": "{選んだ理由}"
+            ${t('INSTRUCTION_DESCRIPTION1')}
+            ${t('INSTRUCTION_DESCRIPTION2')}
           }
           `.trim();
 
@@ -26,7 +27,7 @@ export const promptFormat = (form: UseFormReturn<FormSchemaType>) => {
     prompt =
       prompt +
       `
-        ### 前提条件
+        ### ${t('SELECTION_BIAS')}
         ${bias}
       `.trim();
   }
@@ -35,7 +36,7 @@ export const promptFormat = (form: UseFormReturn<FormSchemaType>) => {
     prompt =
       prompt +
       `
-          ### テーマ
+          ### ${t('THEME')}
           ${type}
         `.trim();
   }
@@ -45,18 +46,18 @@ export const promptFormat = (form: UseFormReturn<FormSchemaType>) => {
 
 export const makeText = (items: Item[], type: string | undefined, bias: string | undefined, result: ResultType) => {
   const choices = items.map((item) => `・ ${item.value}`).join('\n');
-  let text = `### 選択肢
+  let text = `### ${t('CHOICES')}
 ${choices}
 
-### 選択結果
+### ${t('RESULT_TITLE')}
 ${result.selection}
 
-### 理由
+### ${t('REASON')}
 ${result.reason}
 `.trim();
 
   if (bias && bias.trim() !== '') {
-    text = `### 前提条件
+    text = `### ${t('SELECTION_BIAS')}
 ${bias}
 
 ${text}
@@ -64,7 +65,7 @@ ${text}
   }
 
   if (type && type.trim() !== '') {
-    text = `### テーマ
+    text = `### ${t('THEME')}
 ${type}
 
 ${text}
