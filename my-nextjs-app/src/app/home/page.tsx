@@ -8,7 +8,7 @@ import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
 import { CardHeaderComponent } from '@/features/home/components/card-header';
 import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
-import { Language, ResultType } from '@/features/home/types';
+import { ResultType } from '@/features/home/types';
 import { handleSubmit } from '@/features/home/handlers/handleSubmit';
 import { LanguageToggle } from '@/features/home/components/language-toggle';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ const Home = () => {
   const { form } = useAppContext();
 
   const [result, setResult] = useState<ResultType>();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // ローディング
   const [selected, setSelected] = useState<boolean>(false);
@@ -26,15 +26,6 @@ const Home = () => {
 
   // Cookieからデータを取得する
   useLoadCookies(form, setIsLoadingContent);
-
-  const changeLanguage = (lang: Language) => {
-    i18n.changeLanguage(lang);
-  };
-
-  const handleToggleLanguage = () => {
-    const nextLanguage = i18n.language === 'ja' ? 'en' : 'ja';
-    changeLanguage(nextLanguage);
-  };
 
   const handleSubmitCallback = (e: React.FormEvent) => handleSubmit(e, form, setIsLoading, setSelected, setResult);
 
@@ -46,7 +37,7 @@ const Home = () => {
   return (
     <div className="flex min-h-screen items-center justify-center from-blue-100 to-blue-200 p-4">
       <Card className="w-full max-w-2xl">
-        <LanguageToggle currentLanguage={i18n.language as Language} onToggle={handleToggleLanguage} />
+        <LanguageToggle />
         <CardHeaderComponent selected={selected} />
         {isLoadingContent ? (
           <div className="flex items-center justify-center">

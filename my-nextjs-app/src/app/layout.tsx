@@ -1,21 +1,11 @@
 import type { Metadata } from 'next';
 
-import localFont from 'next/font/local';
 import i18n from 'i18next';
-import './globals.css';
+import '@/styles/globals.css';
 import { i18nextInitOptions } from '@/config/i18nextInitOptions';
-import { I18nProvider } from './provider/proveider';
-
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
-});
+import { I18nProvider } from './proveider';
+import { geistMono, geistSans } from '@/styles/font';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'AI Selector',
@@ -37,9 +27,9 @@ export default async function RootLayout({
 }>) {
   const resolvedParams = await params;
   return (
-    <html lang={resolvedParams.locale}>
+    <html lang={resolvedParams.locale} className={cn(geistSans.variable, geistMono.variable)}>
       <I18nProvider>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+        <body className={`antialiased`}>{children}</body>
       </I18nProvider>
     </html>
   );
