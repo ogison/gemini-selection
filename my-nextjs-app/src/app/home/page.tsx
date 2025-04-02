@@ -8,7 +8,7 @@ import { AppProvider, useAppContext } from '@/features/home/context/AppContext';
 import { CardHeaderComponent } from '@/features/home/components/card-header';
 import { Result } from '@/features/home/components/result';
 import { useLoadCookies } from '@/features/home/hooks/useLoadCookies';
-import { Language, ResultType } from '@/features/home/types';
+import { ResultType } from '@/features/home/types';
 import { handleSubmit } from '@/features/home/handlers/handleSubmit';
 import { LanguageToggle } from '@/features/home/components/language-toggle';
 import { useTranslation } from 'react-i18next';
