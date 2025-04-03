@@ -64,7 +64,7 @@ export const ContentForm = ({ handleSubmit, isLoading }: Props) => {
             {t('ADD_OPTION')}
           </Button>
           <Button
-            className="ml-2 w-full"
+            className="ml-2 w-full border border-gray-300 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
             disabled={isLoading || items.filter((item) => item.value.trim() !== '').length < 2}
             type="submit"
           >
